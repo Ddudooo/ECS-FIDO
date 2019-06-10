@@ -22,7 +22,7 @@ $ npm i
 $ npm i --production
 ```
 
-> package.local.json
+### package.local.json
 _this is local setting with npm start script_
 If you have not installed the nodemon package
 You must use package.local.json
