@@ -19,7 +19,8 @@ $ npm i
 ```
 *don't install dev package
 ```bash
-$ npm i --production```
+$ npm i --production
+```
 
 > package.local.json
 _this is local setting with npm start script_
