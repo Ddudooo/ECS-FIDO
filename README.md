@@ -27,6 +27,12 @@ _this is local setting with npm start script_
 If you have not installed the nodemon package
 You must use package.local.json
 
+## node command line
+```bash
+$ ln -s /usr/bin/nodejs /usr/local/bin/node
+$ forever start -c nodemon bin/www
+```
+
 ## __Start nodejs Webserver__
 
 ```bash
