@@ -1,7 +1,7 @@
-function emptyCheckStr(string){
-    if( string.replace(/(\s*)/,'').length == 0){
+function emptyCheckStr(string) {
+    if (string.replace(/(\s*)/, '').length == 0) {
         return false;
-    }else{
+    } else {
         return true;
     }
 }
@@ -9,8 +9,8 @@ function emptyCheckStr(string){
  * Disables all input controls and buttons on the page
  */
 function disableControls() {
-    $('#register').attr('disabled','');
-    $('#authenticate').attr('disabled','');
+    $('#register').attr('disabled', '');
+    $('#authenticate').attr('disabled', '');
     $("#status").addClass('hidden');
 }
 
@@ -23,17 +23,17 @@ function enableControls() {
     $("#status").removeClass('hidden');
 }
 
-function registerButtonClicked(){
+function registerButtonClicked() {
     //
     let userName = $("input[name='userName']").val();
-    if(!emptyCheckStr(userName)){
+    if (!emptyCheckStr(userName)) {
         $('#status').text('Input user name first');
         $('#status').removeClass('hidden');
         return;
     }
 
     let displayName = $("input[name='userDisplayName']").val();
-    if(!emptyCheckStr(displayName)){
+    if (!emptyCheckStr(displayName)) {
         $('#status').text('Input user display name first');
         $('#status').removeClass('hidden');
     }
@@ -43,8 +43,8 @@ function registerButtonClicked(){
     // authenticator selection criteria
     let specifyAuthenticatorSelection = $("input[name='specifyAuthenticatorSelection']").is(':checked');
     let specifyAuthenticatorAttachment = $("input[name='specifyAuthenticatorAttachment']").is(':checked');
-    let attachment = $("input[name='attachment']:checked").val();   // optional
-    let requireResidentKey = $("input[name='requireResidentKey']").is(':checked');  // default to false
+    let attachment = $("input[name='attachment']:checked").val(); // optional
+    let requireResidentKey = $("input[name='requireResidentKey']").is(':checked'); // default to false
     let userVerification = $("input[name='userVerificationRequired']:checked").val();
     // attestation conveyance preference
     let specifyAttestationConvenyance = $("input[name='specifyAttestationConveyance']").is(':checked');
@@ -55,7 +55,7 @@ function registerButtonClicked(){
         displayName: displayName
     };
     // set authenticator selection criteria
-    console.log(specifyAuthenticatorSelection);
+    
     if (specifyAuthenticatorSelection) {
         let authenticatorSelection = {
             requireResidentKey: requireResidentKey,
@@ -72,10 +72,96 @@ function registerButtonClicked(){
     if (specifyAttestationConvenyance) {
         serverPublicKeyCredentialCreationOptionsRequest.attestation = attestation;
     }
+
+
+
+
     
-    $("#registerSpinner").addClass('hidden');
-    $('#status').html('<pre>'+JSON.stringify(serverPublicKeyCredentialCreationOptionsRequest, null, 2)+'</pre>');
-    enableControls();
+    $('#status').html('<pre>' + JSON.stringify(serverPublicKeyCredentialCreationOptionsRequest, null, 4) + '</pre>');
     
-    console.log(JSON.stringify(serverPublicKeyCredentialCreationOptionsRequest, null, 2));
+
+    console.log(JSON.stringify(serverPublicKeyCredentialCreationOptionsRequest, null, 4));
+
+    getRegChallenge(serverPublicKeyCredentialCreationOptionsRequest)
+        .then(response => {
+            return response;
+        })
+        .then((jsonData) => {
+            $('#status').html('<pre>'+JSON.stringify(jsonData, null, 4)+'</pre>');
+            console.log(JSON.stringify(jsonData, null, 4));
+            $("#registerSpinner").addClass('hidden');
+            enableControls();
+        })
+        .catch( e => {
+            $('#status').text("Error : "+ e);
+            $("#registerSpinner").addClass("hidden");
+            enableControls();
+        })
+
+}
+
+function getRegChallenge(serverPublicKeyCredentialCreationOptionsRequest){
+    return rest_post("/fido/reg/challenge",serverPublicKeyCredentialCreationOptionsRequest)
+        .then(response => {
+            if(response.status !== 'ok'){
+                return Promise.reject(response.errorMessage);
+            } else{
+                return Promise.resolve(response);
+            }
+        })
+
+}
+/**
+ * Performs an HTTP get operation
+ * @param {string} endpoint endpoint URL
+ * @returns {Promise} Promise resolving to javascript object received back
+ */
+function rest_get(endpoint) {
+    return fetch(endpoint, {
+            method: "GET",
+            credentials: "same-origin"
+        })
+        .then(response => {
+            return response.json();
+        });
+}
+
+/**
+ * Performs an HTTP POST operation
+ * @param {string} endpoint endpoint URL
+ * @param {any} object
+ * @returns {Promise} Promise resolving to javascript object received back
+ */
+function rest_post(endpoint, object) {
+    return fetch(endpoint, {
+            method: "POST",
+            credentials: "same-origin",
+            body: JSON.stringify(object),
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+        .then(response => {
+            return response.json();
+        });
+}
+
+/**
+ * Performs an HTTP put operation
+ * @param {string} endpoint endpoint URL
+ * @param {any} object
+ * @returns {Promise} Promise resolving to javascript object received back
+ */
+function rest_put(endpoint, object) {
+    return fetch(endpoint, {
+            method: "PUT",
+            credentials: "same-origin",
+            body: JSON.stringify(object),
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+        .then(response => {
+            return response.json();
+        });
 }

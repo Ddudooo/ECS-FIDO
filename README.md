@@ -17,7 +17,8 @@ $ git clone https://devtools.ncloud.com/2561579/ecs-fido.git
 $ cd ecs-fido
 $ npm i
 ```
-*don't install dev package
+* you want not install dev package
+(express-generator, nodemon, forever...)
 ```bash
 $ npm i --production
 ```
