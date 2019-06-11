@@ -25,7 +25,7 @@ router.post('/challenge', function (req, res, next) {
             "id": "localhost"
         },
         "user": {
-            "name": req.body.name,
+            "name": req.body.username,
             "id": req.session.id,
             "displayName": req.body.displayName
         },
@@ -82,9 +82,9 @@ router.post('/challenge', function (req, res, next) {
         "timeout": 50000,
         "excludeCredentials": [],
         "authenticatorSelection": {
-            "authenticatorAttachment": req.body.authenticatorAttachment,
-            "requireResidentKey": req.body.userVerification,
-            "userVerification": req.body.userVerification
+            "authenticatorAttachment": req.body.authenticatorSelection.authenticatorAttachment,
+            "requireResidentKey": req.body.authenticatorSelection.requireResidentKey,
+            "userVerification": req.body.authenticatorSelection.userVerification
         },
         "attestation": "direct",
         "sessionId": req.session.id,
