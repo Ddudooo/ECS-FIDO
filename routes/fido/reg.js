@@ -35,12 +35,13 @@ router.post('/challenge', function (req, res, next) {
             "userVerification": req.body.authenticatorSelection.userVerification
         },
         "attestation": "direct"
-    }
-
+    };
+    console.log("params >>> ");
+    console.log(params);
     const options = {
         uri: 'https://prod-fido-fido2-server.line-apps.com/attestation/options',
         method: 'POST',
-        form: req.body,
+        form: params,
         json: true
     };
     request.post(options, function(error,response,body){
