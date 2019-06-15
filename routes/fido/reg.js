@@ -31,6 +31,8 @@ router.post('/challenge', function (req, res, next) {
         console.log('body:', body); // Print the HTML for the Google homepage
         if(response && response.statusCode == 200){
             res.send(body);
+        }else{
+            res.send(body);
         }
     });
 
