@@ -57,17 +57,17 @@ block content
                     b Attestation conveyance preference
                 .col-3
                     .form-check
-                        input(name="specifyAttestationConveyance" id="specifyAttestationConveyance" type="checkbox" checked).form-check-input
+                        input(name="specifyAttestationConveyance" id="specifyAttestationConveyance" type="checkbox" value="specifyAttestationConveyance" checked).form-check-input
                         |  Specify
                 .col-6
                     .form-check
-                        input.form-check-input(name="attestationConveyancePreference" type="radio" checked)
+                        input.form-check-input(name="attestationConveyancePreference" type="radio" value="none" checked)
                         label.form-check-label None(default)
                     .form-check
-                        input.form-check-input(name="attestationConveyancePreference" type="radio" )
+                        input.form-check-input(name="attestationConveyancePreference" type="radio" value="indirect" )
                         label.form-check-label Indirect
                     .form-check
-                        input.form-check-input(name="attestationConveyancePreference" type="radio" )
+                        input.form-check-input(name="attestationConveyancePreference" type="radio" value="direct" )
                         label.form-check-label Direct
             hr
             .row
@@ -75,7 +75,7 @@ block content
                     b Authenticator selection
                 .col-3
                     .form-chekc
-                        input.form-check-input(name="specifyAuthenticatorSelection" id="specifyAuthenticatorSelection" type="checkbox" checked)
+                        input.form-check-input(name="specifyAuthenticatorSelection" id="specifyAuthenticatorSelection" value="specifyAuthenticatorSelection" type="checkbox" checked)
                         |  Specify
                 .col-6
             hr
@@ -83,35 +83,35 @@ block content
                 .col > Authenticator Attachment
                 .col-3
                     .form-chekc
-                        input.form-check-input(name="specifyAuthenticatorAttachment" id="specifyAuthenticatorAttachment" type="checkbox" checked) 
+                        input.form-check-input(name="specifyAuthenticatorAttachment" id="specifyAuthenticatorAttachment" value="specifyAuthenticatorAttachment" type="checkbox" checked) 
                         |  Specify
                 .col-6
                     .form-check
-                        input.form-check-input(name="attachment" type="radio" checked)
+                        input.form-check-input(name="attachment" type="radio" value="platform" checked)
                         label.form-check-label On bound (platform) authenticator
                             span.errorText - Reported as not available 
                     .form-check
-                        input.form-check-input(name="attachment" type="radio" )
+                        input.form-check-input(name="attachment" type="radio" value="cross-platform")
                         label.form-check-label On roaming (cross-platform) authenticator
             hr
             .row
                 .col > Require resident key (username-less flow)
                 .col-6
                     .form-check
-                        input.form-check-input(name="requireResidentKey" id="requireResidentKey" type="checkbox" checked)
+                        input.form-check-input(name="requireResidentKey" id="requireResidentKey" type="checkbox" value="requireResidentKey" checked)
                         |  Default to unchecked
             hr
             .row
                 .col > User verification required (also for authentication)
                 .col-6
                     .form-check
-                        input.form-check-input(name="userVerificationRequired" type="radio") 
+                        input.form-check-input(name="userVerificationRequired" type="radio" value="required") 
                         |  Required
                     .form-check
-                        input.form-check-input(name="userVerificationRequired" type="radio" checked) 
+                        input.form-check-input(name="userVerificationRequired" type="radio" value="preferred" checked) 
                         |  Preferred (default)
                     .form-check
-                        input.form-check-input(name="userVerificationRequired" type="radio") 
+                        input.form-check-input(name="userVerificationRequired" type="radio" value="discouraged") 
                         |  Discouraged
 
         button.btn.btn-primary(type="button" id="register" onclick="registerButtonClicked();")
