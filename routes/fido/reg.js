@@ -19,6 +19,24 @@ router.post('/challenge', function (req, res, next) {
     console.log("get Register Challenge");
     console.log(req.body);
     // 사용자 데이터 검증 후 
+    const params={
+        "rp": {
+            "name" : "ECS-FIDO",
+            "id": "ecs-fido.com"
+        },
+        "user": {
+            "name": req.body.username,
+            "id": req.session.id,
+            "displayName": req.body.displayName
+        },
+        "authenticatorSelection": {
+            "authenticatorAttachment": req.body.authenticatorSelection.authenticatorAttachment,
+            "requireResidentKey": req.body.authenticatorSelection.requireResidentKey,
+            "userVerification": req.body.authenticatorSelection.userVerification
+        },
+        "attestation": "direct"
+    }
+
     const options = {
         uri: 'https://prod-fido-fido2-server.line-apps.com/attestation/options',
         method: 'POST',
