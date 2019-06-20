@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "pm2 start bin/www -i 0 --name ecs-fido"
+    "start": "pm2 start bin/www --watch -i max --name ecs-fido"
   },
   "dependencies": {
     "base64url": "^3.0.1",
