@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var fidoRegRouter = require('./routes/fido/reg');
+var fidoAuthRouter = require('./routes/fido/auth');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/fido/reg', fidoRegRouter);
+app.use('/fido/auth', fidoAuthRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
