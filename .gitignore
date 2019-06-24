@@ -20,7 +20,7 @@ local.settings
 #node modules
 node_modules
 package-lock.json
-
+package.local.json
 #log
 *.log
 upload/

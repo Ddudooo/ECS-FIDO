@@ -12,6 +12,8 @@ var usersRouter = require('./routes/users');
 var fidoRegRouter = require('./routes/fido/reg');
 var fidoAuthRouter = require('./routes/fido/auth');
 
+var qrcodeRouter = require('./routes/qrcode/test');
+
 var app = express();
 
 // view engine setup
@@ -30,8 +32,14 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+
+
+
 app.use('/fido/reg', fidoRegRouter);
 app.use('/fido/auth', fidoAuthRouter);
+
+app.use('/qrcode', qrcodeRouter);
+
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
