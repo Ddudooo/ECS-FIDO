@@ -41,7 +41,7 @@ const sess={
   secure: false,
     },
   store: new RedisStore({
-    host: 'localhost', port: 6379, logErrors: true
+	  host: 'localhost', port: 6379, pass: '!db123', logErrors: true
   }),
  };
 app.use(session(sess));
