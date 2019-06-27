@@ -6,6 +6,9 @@ var session = require('express-session');
 //redis session
 var redis = require('redis');
 var connectRedis = require('connect-redis');
+// mongoDB connection
+var mongoDB = require('mongoose');
+
 var RedisStore = connectRedis(session);
 var bodyParser = require('body-parser');
 var logger = require('morgan');
