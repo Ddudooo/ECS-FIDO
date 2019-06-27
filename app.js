@@ -3,6 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+//redis session
+var redis = require('redis');
+var connectRedis = require('connect-redis');
+var RedisStore = connectRedis(session);
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 
@@ -14,6 +18,8 @@ var fidoAuthRouter = require('./routes/fido/auth');
 
 var qrcodeRouter = require('./routes/qrcode/test');
 
+var userRouter = require('./routes/user/login');
+
 var app = express();
 
 // view engine setup
@@ -24,21 +30,41 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({
-  secret:'serverkey',
-  resave:false,
-  saveUninitialized:true
-}));
+//redis config
+const sess={
+  resave: false,
+  saveUninitialized: false,
+  secret: 'sessionSecret',
+  name: 'sessionId',
+  cookie: {
+  httpOnly: true,
+  secure: false,
+    },
+  store: new RedisStore({
+    host: 'localhost', port: 6379, logErrors: true
+  }),
+ };
+app.use(session(sess));
+// app.use(session({
+//   secret:'serverkey',
+//   resave:false,
+//   saveUninitialized:true
+// }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req,res,next){
+  res.locals.session = req.session;
+  next();
+});
+
 app.use('/', indexRouter);
-
-
 
 app.use('/fido/reg', fidoRegRouter);
 app.use('/fido/auth', fidoAuthRouter);
 
 app.use('/qrcode', qrcodeRouter);
+
+app.use('/user/', userRouter);
 
 app.use('/users', usersRouter);
 
