@@ -7,7 +7,10 @@ var session = require('express-session');
 var redis = require('redis');
 var connectRedis = require('connect-redis');
 // mongoDB connection
-var mongoDB = require('mongoose');
+var mongoose = require('mongoose');
+var User = require('./models/user');
+
+var appRoot = require('app-root-path');
 
 var RedisStore = connectRedis(session);
 var bodyParser = require('body-parser');
@@ -21,7 +24,7 @@ var fidoAuthRouter = require('./routes/fido/auth');
 
 var qrcodeRouter = require('./routes/qrcode/test');
 
-var userRouter = require('./routes/user/login');
+var userRouter = require('./routes/user/user');
 
 var app = express();
 
@@ -33,6 +36,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+// DB connect
+var db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', function(){
+  //Connected To MongoDB Server
+  console.log("Connected to mongod server");
+})
+mongoose.connect('mongodb://localhost/ecs-fido');
 //redis config
 const sess={
   resave: false,

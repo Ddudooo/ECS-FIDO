@@ -6,3 +6,11 @@ function loginButtonClicked(){
 function logoutButtonClicked(){
     document.location.href="/user/logout";
 }
+
+function RegisterButtonClicked(){
+    document.location.href="/user/register";
+}
+
+function MypageButtonClicked(){
+    document.location.href="/user/mypage";
+}
