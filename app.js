@@ -43,7 +43,7 @@ db.once('open', function(){
   //Connected To MongoDB Server
   console.log("Connected to mongod server");
 })
-mongoose.connect('mongodb://localhost/ecs-fido');
+mongoose.connect('mongodb://admin:!db123@localhost/ecs-fido');
 //redis config
 const sess={
   resave: false,
