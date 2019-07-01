@@ -25,6 +25,7 @@ var fidoAuthRouter = require('./routes/fido/auth');
 var qrcodeRouter = require('./routes/qrcode/test');
 
 var userRouter = require('./routes/user/user');
+var userAPI = require('./routes/user/user_api');
 
 var app = express();
 
@@ -84,6 +85,7 @@ app.use('/fido/auth', fidoAuthRouter);
 app.use('/qrcode', qrcodeRouter);
 
 app.use('/user/', userRouter);
+app.use('/user/api/', userAPI);
 
 app.use('/users', usersRouter);
 

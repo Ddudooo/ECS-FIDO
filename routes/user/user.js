@@ -7,7 +7,7 @@ var router = express.Router();
 
 
 
-// url /qrcode/test
+// url /user/
 
 /* GET home page. */
 router.get('/login/', function (req, res, next) {
