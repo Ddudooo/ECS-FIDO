@@ -130,8 +130,8 @@ module.exports = {
   useBasicAuth: getFileEnv(basicAuthUsername) !== '',
 
   basicAuth: {
-    username: getFileEnv(basicAuthUsername) || 'admin',
-    password: getFileEnv(basicAuthPassword) || 'pass',
+    username: getFileEnv(basicAuthUsername) || 'ecsfido',
+    password: getFileEnv(basicAuthPassword) || '!server123',
   },
 
   options: {
