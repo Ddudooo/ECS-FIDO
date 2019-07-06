@@ -8,6 +8,10 @@ var redis = require('redis');
 var connectRedis = require('connect-redis');
 // mongoDB connection
 var mongoose = require('mongoose');
+var mongo_express = require('mongo-express/lib/middleware')
+var mongo_express_config = require('./mongo_express_config')
+
+// mongoDB MODELS
 var User = require('./models/user');
 
 var appRoot = require('app-root-path');
@@ -78,6 +82,7 @@ app.use(function(req,res,next){
 });
 
 app.use('/', indexRouter);
+app.use('/mongo_express', mongo_express(mongo_express_config));
 
 app.use('/fido/reg', fidoRegRouter);
 app.use('/fido/auth', fidoAuthRouter);

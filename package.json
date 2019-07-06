@@ -16,6 +16,7 @@
     "express-session": "^1.16.2",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
+    "mongo-express": "^0.52.2",
     "mongoose": "^5.6.1",
     "morgan": "~1.9.1",
     "pug": "^2.0.4",
