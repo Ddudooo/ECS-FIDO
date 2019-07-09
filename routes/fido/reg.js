@@ -21,8 +21,8 @@ router.post('/challenge', function (req, res, next) {
     // 사용자 데이터 검증 후 
     const params={
         "rp": {
-            "name" : "ECS-FIDO",
-            "id": "ecs-fido.com"
+            "name" : "ecs-rp",
+            "id": "www.ecs-fido.com"
         },
         "user": {
             "name": req.body.username,
@@ -39,9 +39,9 @@ router.post('/challenge', function (req, res, next) {
     console.log("params >>> ");
     console.log(params);
     const options = {
-        uri: 'https://prod-fido-fido2-server.line-apps.com/attestation/options',
+        uri: 'https://prod-fido-fido2-server.line-apps.com/server/fido2/reg/challenge',
         method: 'POST',
-        form: params,
+        body: params,
         json: true
     };
     request.post(options, function(error,response,body){
@@ -49,6 +49,7 @@ router.post('/challenge', function (req, res, next) {
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body); // Print the HTML for the Google homepage
         if(response && response.statusCode == 200){
+	    body.status="ok";
             res.send(body);
         }else{
             res.send(body);
