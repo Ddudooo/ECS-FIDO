@@ -13,6 +13,7 @@ var mongo_express_config = require('./mongo_express_config')
 
 // mongoDB MODELS
 var User = require('./models/user');
+var Concert = require('./models/concert');
 
 var appRoot = require('app-root-path');
 
@@ -30,6 +31,8 @@ var qrcodeRouter = require('./routes/qrcode/test');
 
 var userRouter = require('./routes/user/user');
 var userAPI = require('./routes/user/user_api');
+
+var marketRouter = require('./routes/market/main');
 
 var app = express();
 
@@ -91,6 +94,8 @@ app.use('/qrcode', qrcodeRouter);
 
 app.use('/user/', userRouter);
 app.use('/user/api/', userAPI);
+
+app.use('/market/', marketRouter);
 
 app.use('/users', usersRouter);
 
