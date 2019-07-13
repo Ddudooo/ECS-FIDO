@@ -13,6 +13,23 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.post('/', function(req,res, next){
+    let inputStr = req.body.qrcodeStr;
+
+    QRCode.toDataURL(inputStr, function (err, url) {
+
+
+        let data = url.replace(/.*,/,'')
+        let img = new Buffer(data,'base64')
+        res.writeHead(200,{
+            'Content-Type' : 'image/png',
+            'Content-Length' : img.length
+        })
+        res.end(img)
+
+    })
+})
+
 router.get('/generate/:qrcode', function (req, res, next) {
     let inputStr = req.params.qrcode;
 

@@ -40,7 +40,8 @@ block content
                 lable qrcode
             .col-6
                 .form-check
-                input.form-control(placeholder="Enter unique identifier e.g., email" id="qrcodeStr" name="qrcodeStr")
+                form#qrcodeForm(method="post")
+                    input.form-control(placeholder="Enter unique identifier e.g., email" id="qrcodeStr" name="qrcodeStr")
         hr
 
         button.btn.btn-primary(type="button" id="qrcodeGenerate" onclick="registerButtonClicked();")
