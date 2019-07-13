@@ -25,7 +25,7 @@ var categorySchema = new Schema({   // 카테고리 스키마
         default: Date.now,
     },
 })
-
+var Category = mongoose.model('category', categorySchema, 'concert_category');
 var concertSchema = new Schema({    //콘서트 스키마
     title: {                        // 콘서트 제목
         type: String,
@@ -49,6 +49,7 @@ var concertSchema = new Schema({    //콘서트 스키마
         default: Date.now,
     },
 })
+var Concert =mongoose.model('concert', concertSchema, 'concert');
 
 var seatSchema = new Schema({       // 자리 스키마
     concert: concertSchema,
@@ -81,7 +82,11 @@ var seatSchema = new Schema({       // 자리 스키마
         default: Date.now,
     },
 })
-
-module.exports = mongoose.model('category', categorySchema, 'concert_category');
-module.exports = mongoose.model('concert', concertSchema, 'concert');
-module.exports = mongoose.model('seat', seatSchema, 'concert_seat');
+var Seat = mongoose.model('seat', seatSchema, 'concert_seat')
+// module.exports = mongoose.model('category', categorySchema, 'concert_category');
+// module.exports = mongoose.model('concert', concertSchema, 'concert');
+module.exports = {
+    Category: Category,
+    Concert: Concert,
+    Seat: Seat
+};
