@@ -53,4 +53,4 @@ $ node bin/www
 $ npm start
 ```
 
-test webhook
+test auto deploy
