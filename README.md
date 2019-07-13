@@ -52,5 +52,3 @@ $ node bin/www
 ```bash
 $ npm start
 ```
-
-test auto deploy
