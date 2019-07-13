@@ -31,7 +31,13 @@ var concertSchema = new Schema({    //콘서트 스키마
         type: String,
         require : true,        
     },
-    category : categorySchema,
+    category : [
+        {
+            type: Schema.ObjectId,
+            ref: 'Category',
+            require: true,    
+        },
+    ],
     priority : {                    // 우선순위
         type: Number,
         required : false,
@@ -52,7 +58,13 @@ var concertSchema = new Schema({    //콘서트 스키마
 var Concert =mongoose.model('concert', concertSchema, 'concert');
 
 var seatSchema = new Schema({       // 자리 스키마
-    concert: concertSchema,
+    concert: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: Concert,
+            require: true
+        }
+    ],
     mainSeat:{                      // 주 분류 A열 B열 ...
         type: String,
         require : true
