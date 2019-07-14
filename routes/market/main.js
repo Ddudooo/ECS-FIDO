@@ -70,8 +70,28 @@ router.post('/concert/create/', function(req,res,next){
             
             newConcert.save().then((result)=>{
                 console.log(result);
-                res.status(200);
-                res.redirect('/market/');
+                return result;  
+            }).then((concert)=>{
+                let defaultArray = ['A', 'B', 'C'];
+                for (var i of defaultArray){
+                    for (var j =1; j<=3; j++){
+                        var newSeat = new market.Seat({
+                            mainSeat: i,                            
+                            seatNumber: j,
+                            priority: 0
+                        })
+                        newSeat.concert.push(concert);
+
+                        newSeat.save().then((result)=>{
+                            console.log(result);
+                            
+                        }).catch((err)=>{
+                            console.error(err);
+                            res.redirect('/market/');
+                        })
+                    }
+                }
+                
             }).catch((err)=>{
                 console.error(err);
                 res.redirect('/market/');
@@ -83,6 +103,9 @@ router.post('/concert/create/', function(req,res,next){
         console.error(err);
         res.redirect('/market/');
     })
+
+    res.status(200);
+    res.redirect('/market/');
 })
 
 module.exports = router;
