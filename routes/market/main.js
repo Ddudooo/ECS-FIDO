@@ -107,5 +107,36 @@ router.post('/concert/create/', function(req,res,next){
     res.status(200);
     res.redirect('/market/');
 })
-
+router.get('/concert/',(req,res,next)=>{
+    market.Concert.find({})
+    .then((concertList)=>{
+        // console.log(concertList);
+        let count=0;
+        concertList.forEach(
+            (value, index, list)=>{
+                
+                // console.log(value);
+                market.Category.findOne({
+                    _id: value.category
+                }).exec((err,data)=>{
+                    // console.log(data.name);
+                    // console.log(concertList[count]);
+                    concertList[count].category[0] = String(data.name);
+                    count++;
+                    if(count===list.length){
+                        console.log('Done!')
+                        // console.log(concertList);
+                        res.render('market/concert_list', {concertList : concertList})
+                    }
+                })
+                
+            }
+        )
+        console.log("=====================render");
+        
+    }).catch((err)=>{
+        console.error(err);
+        res.redirect('/market/');
+    })
+});
 module.exports = router;

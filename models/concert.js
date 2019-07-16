@@ -26,6 +26,7 @@ var categorySchema = new Schema({   // 카테고리 스키마
     },
 })
 var Category = mongoose.model('category', categorySchema, 'concert_category');
+
 var concertSchema = new Schema({    //콘서트 스키마
     title: {                        // 콘서트 제목
         type: String,
@@ -35,7 +36,7 @@ var concertSchema = new Schema({    //콘서트 스키마
         {
             type: Schema.ObjectId,
             ref: 'Category',
-            require: true,    
+            require: true,
         },
     ],
     priority : {                    // 우선순위
