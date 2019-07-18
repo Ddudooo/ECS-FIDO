@@ -151,4 +151,21 @@ router.post('/concert/', (req,res,next)=>{
         res.redirect('/market/concert/');
     })
 })
+
+router.post('/concert/seat/', (req,res, next)=>{
+    market.Seat.findOne({
+        _id : req.body.seatId
+    }).then((seatinfo)=>{
+        if(seatinfo!=null){
+            seatinfo.status = "Select";
+            seatinfo.save().then((result)=>{
+                console.log(result);
+                res.redirect('/market/');
+            })
+        }
+    }).catch((err)=>{
+        console.err(err);
+        res.redirect('/market/concert/');
+    })
+})
 module.exports = router;
