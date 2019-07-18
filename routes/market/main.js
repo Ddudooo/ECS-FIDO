@@ -139,4 +139,16 @@ router.get('/concert/',(req,res,next)=>{
         res.redirect('/market/');
     })
 });
+
+router.post('/concert/', (req,res,next)=>{
+    market.Seat.find({
+        concert: req.body.concertId
+    }).then((Seat)=>{
+        //concert seat
+        res.render('market/concert_seat',{concertSeat:Seat})
+    }).catch((err)=>{
+        console.err(err);
+        res.redirect('/market/concert/');
+    })
+})
 module.exports = router;
