@@ -278,7 +278,7 @@ function getRegChallenge(serverPublicKeyCredentialCreationOptionsRequest) {
  */
 function getAuthChallenge(serverPublicKeyCredentialGetOptionsRequest) {
     logObject("Get auth challenge", serverPublicKeyCredentialGetOptionsRequest);
-    return rest_post("/assertion/options", serverPublicKeyCredentialGetOptionsRequest)
+    return rest_post("/fido/auth/challenge", serverPublicKeyCredentialGetOptionsRequest)
         .then(response => {
             logObject("Get auth challenge", response);
             if (response.status !== 'ok') {
