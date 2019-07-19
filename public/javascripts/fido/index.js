@@ -260,7 +260,7 @@ function getTableWithData(credentials) {
  */
 function getRegChallenge(serverPublicKeyCredentialCreationOptionsRequest) {
     logObject("Get reg challenge", serverPublicKeyCredentialCreationOptionsRequest);
-    return rest_post("/attestation/options", serverPublicKeyCredentialCreationOptionsRequest)
+    return rest_post("/fido/reg/challenge", serverPublicKeyCredentialCreationOptionsRequest)
         .then(response => {
             logObject("Get reg challenge response", response);
             if (response.status !== 'ok') {
