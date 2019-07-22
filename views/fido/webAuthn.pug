@@ -40,14 +40,14 @@ block content
                 lable UserName
             .col-6
                 .form-check
-                input.form-control(placeholder="Enter unique identifier e.g., email" id="userName" name="userName")
+                    input.form-control(placeholder="Enter unique identifier e.g., email" id="userName" name="username")
         hr
         .row
             .col
                 lable DisplayName
             .col-6
                 .form-check
-                input.form-control(placeholder="Enter human readable name like your name" id="userDisplayName" name="userDisplayName")
+                    input.form-control(placeholder="Enter human readable name like your name" id="userDisplayName" name="userDisplayName")
         hr
         fieldset.form-group
             legend.col-from-label
@@ -113,7 +113,7 @@ block content
                         input.form-check-input(name="userVerificationRequired" type="radio" value="discouraged") 
                         |  Discouraged
 
-        button.btn.btn-primary(type="button" id="register" onclick="registerButtonClicked();")
+        button.btn.btn-primary(type="button" id="register")
             i.fa.fa-spinner.fa-spin.spinner.hidden(id="registerSpinner")
             |  Register
         button.btn.btn-primary(type="button" id="authenticate" )

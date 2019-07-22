@@ -34,7 +34,7 @@ router.post('/challenge', function (req, res, next) {
             "requireResidentKey": req.body.authenticatorSelection.requireResidentKey,
             "userVerification": req.body.authenticatorSelection.userVerification
         },
-        "attestation": "direct"
+        "attestation": req.body.authenticatorSelection.attestation 
     };
     console.log("params >>> ");
     console.log(params);
@@ -49,7 +49,9 @@ router.post('/challenge', function (req, res, next) {
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body); // Print the HTML for the Google homepage
         if(response && response.statusCode == 200){
+	    delete body.serverResponse;
 	    body.status="ok";
+	    body.attestation=params.attestation;
             res.send(body);
         }else{
             res.send(body);

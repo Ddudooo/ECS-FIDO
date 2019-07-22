@@ -26,3 +26,5 @@ package.local.json
 upload/
 logs/
 dump.*
+
+.git/*
