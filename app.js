@@ -63,10 +63,11 @@ mongoose.connect('mongodb://localhost:27017/ecs-fido?authSource=admin', {
 //redis config
 const sess = {
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     secret: 'sessionSecret',
     name: 'sessionId',
     cookie: {
+	maxAge : 60 * 60 *1000,//1hour
         httpOnly: true,
         secure: false,
     },

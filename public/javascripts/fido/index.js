@@ -332,7 +332,7 @@ function createCredential(options) {
             logVariable("response.attestationObject (b64url)", attestation.response.attestationObject);
             logVariable("id", attestation.type);
 
-            return rest_post("/attestation/result", attestation);
+            return rest_post("/fido/reg/attestation/result", attestation);
         })
         .catch(function(error) {
             logVariable("create credential error", error);
