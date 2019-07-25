@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+var User = require('./user');
 var Schema = mongoose.Schema;
 
 var categorySchema = new Schema({   // 카테고리 스키마
@@ -66,6 +66,11 @@ var seatSchema = new Schema({       // 자리 스키마
             require: true
         }
     ],
+    user: {
+            type: Schema.Types.ObjectId,
+            ref: User,
+            require: false
+    },
     mainSeat:{                      // 주 분류 A열 B열 ...
         type: String,
         require : true

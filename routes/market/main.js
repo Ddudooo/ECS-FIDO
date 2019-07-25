@@ -145,7 +145,7 @@ router.post('/concert/', (req,res,next)=>{
         concert: req.body.concertId
     }).then((Seat)=>{
         //concert seat
-        res.render('market/concert_seat',{concertSeat:Seat})
+        res.render('market/concert_seat',{concertSeat:Seat});
     }).catch((err)=>{
         console.err(err);
         res.redirect('/market/concert/');

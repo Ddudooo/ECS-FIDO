@@ -33,6 +33,7 @@ var userRouter = require('./routes/user/user');
 var userAPI = require('./routes/user/user_api');
 
 var marketRouter = require('./routes/market/main');
+var marketAPI = require('./routes/market/market_api');
 
 var app = express();
 
@@ -103,6 +104,7 @@ app.use('/user/', userRouter);
 app.use('/user/api/', userAPI);
 
 app.use('/market/', marketRouter);
+app.use('/market/api/', marketAPI);
 
 app.use('/users', usersRouter);
 
