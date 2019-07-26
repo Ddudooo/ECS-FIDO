@@ -200,8 +200,9 @@ router.post('/seat/', (req, res, next) => {
             return;
         }
         if (decode) {
+            let query;
             if (!req.body.seatId) {
-                let query = {
+                query = {
                     concert: req.body.concertId
                 };
                 if (req.body.mainSeat && req.body.seatNumber) {
@@ -214,22 +215,36 @@ router.post('/seat/', (req, res, next) => {
                     });
                     return;
                 }
-                market.Seat.findOne(query).exec((err, seat) => {
-                    if (err || !seat) {
-                        res.json({
-                            status: "fail",
-                            msg: "please check information, nothing found"
-                        });
-                    } else {
-                        seat.status = "Select";
+            }else{
+                query ={
+                    _id : req.body.seatId
+                };
+            }
+            market.Seat.findOne(query).exec((err, seat) => {
+                if (err || !seat) {
+                    res.json({
+                        status: "fail",
+                        msg: "please check information, nothing found"
+                    });
+                } else {
+                    User.findOne({
+                        id : decode.id, 
+                    }).exec((err, user)=>{
+                        if(err|!user){
+                            res.status(500).json({status:"fail",msg:"please check login information"});
+                            return;
+                        }
+                        seat.status = "Select";    
+                        seat.user = user;
                         console.log("========================================================");
                         console.log(seat);
                         console.log("========================================================");
                         seat.save()
                             .then((result) => {
-                                req.session.seatTimeOut = setTimeout((result) => {
+                                setTimeout(() => {
                                     if (result.status == "Select") {
                                         result.status = "None";
+                                        delete result.user;
                                         result.save().then((releaseSeat) => {
                                             console.log(releaseSeat);
                                             console.log("release select seat");
@@ -237,7 +252,7 @@ router.post('/seat/', (req, res, next) => {
                                             console.error(err);
                                         });
                                     }
-                                }, 1000 * 60 * 5);
+                                }, 1000 * 60 *5 );
                                 console.log("Seat Release setTimeOut...");
                                 // delete result.concert;
                                 // console.log(typeof(result));
@@ -258,9 +273,11 @@ router.post('/seat/', (req, res, next) => {
                             selectSeat : seat
                         });
                         return;
-                    }
-                });
-            }
+                    });
+                    
+                }
+            });
+            
         } else {
             res.status(403).json({
                 status: "fail",
@@ -268,6 +285,77 @@ router.post('/seat/', (req, res, next) => {
             });
         }
 
+    }
+});
+
+router.post('/seat/payment/', (req,res,next)=>{
+    let query={};
+    if(req.body.token){
+        let decode;
+        try{
+            decode = jwt.verify(req.body.token, secretObj.secret);
+        }catch(err){
+            console.error(err);
+            res.json({status:"fail", msg:"token not valid, please retry login"});
+            return;
+        }
+        if(decode){
+            User.findOne({
+                id : decode.id
+            }).exec((err, user)=>{
+                if(err|!user){
+                    res.status(500).json({status:"fail", msg:"please check information, your account disabled"});
+                    return;
+                }
+                if(req.body.seatId){
+                    query._id = req.body.seatId;
+                    query.user = user;
+                    query.status = "Select";
+                }else{
+                    res.status(500).json({status:"fail", msg:"please check information, required seat id"});
+                    return;
+                }
+                market.Seat.findOne(query).exec((err,seat)=>{
+                    if(err|!seat){
+                        res.status(500).json({status:"fail", msg:"please check information, seat not found"});
+                        return;
+                    }
+                    if(String(seat.user) === String(user._id) && seat.status == "Select"){                        
+                        seat.status = "payed";
+                        try{
+                            console.log("this version is test demo");
+                            /*
+                            Some payment logic
+                            */
+                        }catch(payError){
+                            console.error(payError);
+                            res.status(500).json({status:"fail", msg:"Some thing wrong, please check information"});
+                            return;
+                        }
+                        seat.save().then((result)=>{
+                            res.status(200).json({status:"success",msg:"Payment successed, enjoy", seat: result});
+                            return;
+                        }).catch((saveError)=>{
+                            /*
+                            payment revork logic
+                            */                            
+                            console.error(saveError);
+                            res.status(500).json({status:"fail", msg:"Some thing wrong, please check information"});
+                            return;
+                        });
+                    }else{
+                        res.status(500).json({status:"fail", msg:"please check information, this seat not yours"});
+                        return;
+                    }
+                });
+            });
+        }else{
+            res.json({status:"fail", msg:"token not valid, please retry login"});
+            return;
+        }
+    }else{
+        res.status(403).json({status:"fail", msg:"seat payment fail, login first"});
+        return;
     }
 });
 module.exports = router;
