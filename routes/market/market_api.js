@@ -54,15 +54,30 @@ router.get('', function (req, res, next) {
  *                      properties:
  *                          status:
  *                              type:string
+ *                          concertList :
+ *                              type: array
+ *                              items :
+ *                                  type : object
+ *                                  properties :
+ *                                      status : 
+ *                                          type : string
+ *                                      title :
+ *                                          type : string
+ *                      example :
+ *                          status: 성공 여부
+ *                          concertList :
+ *                              items:
+ *                                  status : 콘서트 활성 상태
+ *                                  title : 콘서트 명
  *      post :
  *          summary : 콘서트 좌석 정보
  *          tags : [market]
  *          produces :
  *              - application/json
  *          parameters:
- *              - name : concertId
- *                in : body
- *                description : 콘서트 검색 
+ *              - in : body
+ *                description : 콘서트 검색 </br>
+ *                              이름으로 검색시 동일 이름 여러 개 나올 수 있음 
  *                schema :
  *                  type : object
  *                  properties:
@@ -71,8 +86,8 @@ router.get('', function (req, res, next) {
  *                      concertId :
  *                          type:string
  *                  example :
- *                      title : example
- *                      concertId : example_id
+ *                      title : 콘서트 명 (없을시 ID값 필요)
+ *                      concertId : 콘서트 ID (없을시 콘서트 명 필요)
  *          responses :
  *              '200' :
  *                  description : 성공
@@ -258,7 +273,50 @@ router.post('/concert/', (req, res, next) => {
         });
     }
 });
-
+/**
+ * @swagger
+ * /market/api/seat/:
+ *      post :
+ *          summary : 콘서트 좌석 선택
+ *          tags : [market]
+ *          produces : 
+ *              - application/json
+ *          parameters:
+ *              - in : body
+ *                description : 콘서트 좌석 정보</br>
+ *                              Login으로 생성된 JWT 토큰 필요 </br>
+ *                              seatId 혹은 mainSeat, (middleSeat), seatNumber 필요</br>
+ *                              선택 좌석은 5분후에도 'Select'상태일시 초기 상태로 돌아감
+ *                schema : 
+ *                  type : object
+ *                  properties :
+ *                      token :
+ *                          type : string
+ *                          require : true
+ *                      seatId :
+ *                          type : string
+ *                      mainSeat :
+ *                          type : string
+ *                      seatNumber :
+ *                          type : number
+ *                  example : 
+ *                      token : login jwt token (반드시 필요)
+ *                      seatId : seat _id value (없어도 되나 별도의 좌석 정보 필요)
+ *                      mainSeat : A, B , C... (없을 경우 좌석 ID 필요)
+ *                      seatNumber : 123
+ *          responses:
+ *              '200' :
+ *                  description : 성공
+ *                  schema:
+ *                      type : object
+ *                      properties : 
+ *                          status : 
+ *                              type : string
+ *                          selectSeat :
+ *                              type : string 
+ * 
+ *                          
+ */
 router.post('/seat/', (req, res, next) => {
     console.log("POST '/market/api/seat/'");
     console.log(req.body);
@@ -364,7 +422,54 @@ router.post('/seat/', (req, res, next) => {
 
     }
 });
-
+/**
+ * @swagger
+ * /market/api/seat/payment/:
+ *      post :
+ *          summary : 좌석 결정 (결제)
+ *          tags : [market]
+ *          produces : 
+ *              - application/json
+ *          parameters :
+ *              - in : body
+ *                description : 선택 좌석을 결정 상태(결제 상태)로 변경 </br>
+ *                              결제 모듈 추가 여부에 따라 수정될 가능성이 있음
+ *                schema :
+ *                  type : object
+ *                  properties :
+ *                      token :
+ *                          type : string
+ *                          require : true
+ *                      seatId :
+ *                          type : string
+ *                          require : true
+ *                  example :
+ *                      token : 로그인 과정으로 생성된 JWT 토큰
+ *                      seatId : 좌석 선택 과정으로 얻은 좌석 ID
+ *          responses :
+ *              '200' :
+ *                  descripttion : 성공
+ *                  schema :
+ *                      type : object 
+ *                      properties : 
+ *                          status : 
+ *                              type : string
+ *                          msg : 
+ *                              type : string
+ *                          seat :
+ *                              type : object
+ *                              properties :
+ *                                  _id : 
+ *                                      type : string
+ *                                  status :
+ *                                      type : string
+ *                      example :
+ *                          status : success
+ *                          msg : Payment successed
+ *                          seat :
+ *                              _id : 좌석 ID
+ *                              status : payed
+ */
 router.post('/seat/payment/', (req,res,next)=>{
     let query={};
     if(req.body.token){
