@@ -40,7 +40,7 @@ router.get('/', function (req, res, next) {
  *                      displayName :
  *                          type : string
  *                          example : 닉네임으로 쓸듯함
- *                      authticatorSelection :
+ *                      authenticatorSelection :
  *                          type : object 
  *                          properties :
  *                              authenticatorAttachment:
@@ -54,10 +54,10 @@ router.get('/', function (req, res, next) {
  *                                  type : string
  *                                  enum : [required, preferred, discouraged]
  *                                  example : preferred
- *                              attestation:
- *                                  type : string
- *                                  enum : [none, indirect, direct]
- *                                  example : none
+ *                      attestation:
+ *                          type : string
+ *                          enum : [none, indirect, direct]
+ *                          example : none
  *          responses :
  *              200 : 
  *                  description : 성공시 데이터 확인바람
