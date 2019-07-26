@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *  name: User
+ *  description : 테스트용 유저 JWT 발급용
+ */
+
 var express = require('express');
 var appRoot = require('app-root-path');
 // DB MODELS
@@ -9,7 +16,36 @@ var router = express.Router();
 
 
 // url /user/api/
-
+/**
+ * @swagger
+ * /user/api/login/:
+ *  post:
+ *      summary : 아이디, 패스워드로 로그인
+ *      tags : [User]
+ *      produces : 
+ *          - application/json
+ *      parameters :
+ *          - in : body
+ *            description :
+ *              로그인 완료후  JWT 반환
+ *            schema :
+ *              type : object
+ *              properties:
+ *                  id :
+ *                      type: string
+ *                  pw :
+ *                      type : string
+ *      responses :
+ *          200 :
+ *              schema :
+ *                  type : object
+ *                  properties:
+ *                      status :
+ *                          type : string                          
+ *                      token : 
+ *                          type : string
+ * 
+ */
 router.post('/login/', function (req, res, next) {
     //정상 데이터시 토큰 리턴
     console.log(req.body);
@@ -38,7 +74,33 @@ router.post('/login/', function (req, res, next) {
         res.json({status:"fail", msg:"please check server"});
     })    
 });
-
+/**
+ * @swagger
+ * /user/api/register/:
+ *  post:
+ *      summary : 아이디, 패스워드로 가입
+ *      tags : [User]
+ *      produces : 
+ *          - application/json
+ *      parameters :
+ *          - in : body
+ *            description :
+ *              테스트용으로 현재 중복체크 X 로 인한 기존 내용 덮어씌워짐
+ *            schema :
+ *              type : object
+ *              properties:
+ *                  id :
+ *                      type: string
+ *                  pw :
+ *                      type : string
+ *      responses :
+ *          200 :
+ *              schema :
+ *                  type : object
+ *                  properties:
+ *                      status :
+ *                          type : string                          
+ */
 router.post('/register/', function(req,res, next){
     // 정상 데이터시 토큰 리턴
     var newUser = new User({
@@ -59,7 +121,33 @@ router.post('/register/', function(req,res, next){
     })    
 });
 
-
+/**
+ * @swagger
+ * /user/api/profile/:
+ *  post:
+ *      summary : 토큰으로 정보 확인
+ *      tags : [User]
+ *      produces : 
+ *          - application/json
+ *      parameters :
+ *          - in : body
+ *            description :
+ *              토큰으로 확인후 해당 유저에 맞는 정보 반환
+ *            schema :
+ *              type : object
+ *              properties:
+ *                  token :
+ *                      type : string
+ *      responses :
+ *          200 :
+ *              schema :
+ *                  type : object
+ *                  properties:
+ *                      status :
+ *                          type : string  
+ *                      msg :
+ *                          type : string                        
+ */
 router.post('/profile/', function(req,res, next){
     // 정상 데이터시 정보 리턴
     let token = req.body.token;
@@ -87,6 +175,33 @@ router.post('/profile/', function(req,res, next){
     }
 });
 
+/**
+ * @swagger
+ * /user/api/modify/:
+ *  post:
+ *      summary : 토큰으로 정보 변경
+ *      tags : [User]
+ *      produces : 
+ *          - application/json
+ *      parameters :
+ *          - in : body
+ *            description :
+ *              토큰으로 확인후 해당 유저에 맞는 정보 변경
+ *            schema :
+ *              type : object
+ *              properties:
+ *                  token :
+ *                      type : string
+ *                  infoName :
+ *                      type : string
+ *      responses :
+ *          200 :
+ *              schema :
+ *                  type : object
+ *                  properties:
+ *                      status :
+ *                          type : string  
+ */
 router.post('/modify/', (req,res,next)=>{
     // 정상 데이터시 정보 변경후 status 값 리턴
     let token = req.body.token;
@@ -121,6 +236,33 @@ router.post('/modify/', (req,res,next)=>{
     }
 });
 
+/**
+ * @swagger
+ * /user/api/secssion/:
+ *  post:
+ *      summary : 토큰으로 탈퇴
+ *      tags : [User]
+ *      produces : 
+ *          - application/json
+ *      parameters :
+ *          - in : body
+ *            description :
+ *              토큰으로 확인후 해당 유저 탈퇴
+ *            schema :
+ *              type : object
+ *              properties:
+ *                  token :
+ *                      type : string
+ *      responses :
+ *          200 :
+ *              schema :
+ *                  type : object
+ *                  properties:
+ *                      status :
+ *                          type : string  
+ *                      msg : 
+ *                          type : string
+ */
 router.post('/secssion/', (req,res,next)=>{
     // 정상 요청시 삭제후, status 값 리턴
     let token = req.body.token;
