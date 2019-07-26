@@ -1,3 +1,9 @@
+/**
+ * @swagger
+ * tags:
+ *  name: market
+ *  description : 티켓 구매
+ */
 var express = require('express');
 var appRoot = require('app-root-path');
 // DB MODELS
@@ -10,7 +16,16 @@ var router = express.Router();
 
 
 // url /market/api/
-
+/**
+ * @swagger
+ * /market/api/: 
+ *      get :
+ *          summary : market api 테스트
+ *          tags : [market]
+ *      responses :
+ *          200 : 
+ *              desciption : 성공
+ */
 router.get('', function (req, res, next) {
     res.json({
         status: "success",
@@ -18,6 +33,68 @@ router.get('', function (req, res, next) {
     });
 });
 
+/**
+ * @swagger
+ * /market/api/concert/: 
+ *      get :
+ *          summary : concert 정보 
+ *          tags : [market]
+ *          parameters:
+ *              - name : category
+ *                require : false
+ *                in : query
+ *                type : string
+ *                description : 카테고리명으로 콘서트 검색
+ *          
+ *          responses :
+ *               '200' : 
+ *                  description : 성공
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          status:
+ *                              type:string
+ *      post :
+ *          summary : 콘서트 좌석 정보
+ *          tags : [market]
+ *          produces :
+ *              - application/json
+ *          parameters:
+ *              - name : concertId
+ *                in : body
+ *                description : 콘서트 검색 
+ *                schema :
+ *                  type : object
+ *                  properties:
+ *                      title:
+ *                          type:string
+ *                      concertId :
+ *                          type:string
+ *                  example :
+ *                      title : example
+ *                      concertId : example_id
+ *          responses :
+ *              '200' :
+ *                  description : 성공
+ *                  schema:
+ *                      type : object
+ *                      properties :
+ *                          status : 
+ *                              type : string
+ *                              description : 반환 상태
+ *                          concertSeat :
+ *                              type : array
+ *                              items : 
+ *                                  type : object
+ *                                  properties:
+ *                                      status:
+ *                                          type : string
+ *                                      mainSeat:
+ *                                          type : string
+ *                                      seatNumber:
+ *                                          type : string
+ *                              
+ */
 router.get('/concert/', (req, res, next) => {
     console.log("GET '/market/api/concert/' ");
     console.log(req.query);

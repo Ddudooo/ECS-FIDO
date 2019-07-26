@@ -35,7 +35,29 @@ var userAPI = require('./routes/user/user_api');
 var marketRouter = require('./routes/market/main');
 var marketAPI = require('./routes/market/market_api');
 
+//swagger
+var swaggerJSDoc = require('swagger-jsdoc');
+// Swagger Settings
+const swaggerDefinition = {
+    info: { // API informations (required)
+      title: 'ECS-FIDO', // Title (required)
+      version: '0.0.1', // Version (required)
+      description: 'A sample API', // Description (optional)
+    },
+    //host : 'localhost:3000'
+};  
+const swaggerOptions = {
+    // Import swaggerDefinitions
+    swaggerDefinition: swaggerDefinition,
+    // Path to the API docs
+    apis: ['./routes/*/*_api.js']
+};
+var swaggerSpec = swaggerJSDoc(swaggerOptions);
+// Swagger Setting End
+
 var app = express();
+
+var swaggerUi = require('swagger-ui-express');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -92,6 +114,8 @@ app.use(function (req, res, next) {
     next();
 });
 
+
+
 app.use('/', indexRouter);
 app.use('/mongo_express', mongo_express(mongo_express_config));
 
@@ -105,6 +129,8 @@ app.use('/user/api/', userAPI);
 
 app.use('/market/', marketRouter);
 app.use('/market/api/', marketAPI);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/users', usersRouter);
 
