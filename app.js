@@ -50,7 +50,7 @@ const swaggerOptions = {
     // Import swaggerDefinitions
     swaggerDefinition: swaggerDefinition,
     // Path to the API docs
-    apis: ['./routes/*/*_api.js']
+    apis: ['./routes/*/*_api.js', './routes/fido/*.js']
 };
 var swaggerSpec = swaggerJSDoc(swaggerOptions);
 // Swagger Setting End
