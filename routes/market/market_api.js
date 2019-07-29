@@ -32,6 +32,25 @@ router.get('', function (req, res, next) {
         msg: "check for endpoint"
     });
 });
+/**
+ * @swagger
+ * /market/api/category/:
+ *      get :
+ *          summary : 콘서트 카테고리
+ *          tags : [market]
+ *          responses : 
+ *              200 : 
+ *                  description : 성공
+ */
+router.get('/category', function(req,res,next){
+    console.log("GET '/market/api/category/'");
+    market.Category.find({})
+                .then((categoryList)=>{
+                    res.status(200).json({status:"success",categoryList:categoryList});
+                }).catch((err)=>{
+                    res.status(500).json({status:"fail",msg:"please check information"});
+                });
+});
 
 /**
  * @swagger
