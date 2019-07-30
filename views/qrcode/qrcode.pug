@@ -41,9 +41,9 @@ block content
             .col-6
                 .form-check
                 form#qrcodeForm(method="post")
-                    input.form-control(placeholder="Enter unique identifier e.g., email" id="qrcodeStr" name="qrcodeStr")
-        hr
+                    input.form-control(placeholder="Enter unique identifier e.g., email" id="qrcodeStr" name="qrcodeStr" required)
+                    hr
 
-        button.btn.btn-primary(type="button" id="qrcodeGenerate" onclick="registerButtonClicked();")
-            i.fa.fa-spinner.fa-spin.spinner.hidden(id="qrcodeGenerateSpinner")
-            |  Generate
+                    button.btn.btn-primary(type="submit" id="qrcodeGenerate" onclick="registerButtonClicked();")
+                         i.fa.fa-spinner.fa-spin.spinner.hidden(id="qrcodeGenerateSpinner")
+                         |  Generate
