@@ -26,98 +26,32 @@ router.get('/', function (req, res, next) {
  *      post:
  *          summary : Fido Register challenge
  *          tags : [Fido]
- *          produces : 
- *              - application/json
  *          parameters:
  *              - in : body
- *                description : 가입 시도
- *                schema :
- *                  type : object
- *                  properties : 
- *                      username :
- *                          type : string
- *                          example : 아이디 값으로 쓸듯함
- *                      displayName :
- *                          type : string
- *                          example : 닉네임으로 쓸듯함
- *                      authenticatorSelection :
- *                          type : object 
- *                          properties :
- *                              authenticatorAttachment:
- *                                  type : string
- *                                  enum : [platform, cross-platform]
- *                                  example : platform
- *                              requireResidentKey:
- *                                  type : boolean
- *                                  enum : [true, false]
- *                                  example : false
- *                              userVerification:
- *                                  type : string
- *                                  enum : [required, preferred, discouraged]
- *                                  example : preferred
- *                              attestation:
- *                                  type : string
- *                                  enum : [none, indirect, direct]
- *                                  example : none
+ *                description : Fido Register Challenge
+ *                content:
+ *                  application/json:
+ *                       schema :
+ *                           type : object
+ *                           properties : 
+ *                               username :
+ *                                   type : string
+ *                               displayName :
+ *                                   type : string
+ *                               authenticatorSelection :
+ *                                   type : object 
+ *                                   properties :
+ *                                       authenticatorAttachment:
+ *                                           type : string
+ *                                       requireResidentKey:
+ *                                           type : boolean
+ *                                       userVerification:
+ *                                           type : string
+ *                               attestation:
+ *                                   type : string
  *          responses :
  *              200 : 
- *                  description : 성공시 데이터 확인바람
- *                  schema : 
- *                      type : object
- *                      properties :
- *                          status :
- *                              type : string
- *                          rp :
- *                              type : object
- *                              properties:
- *                                  name :
- *                                      type : string
- *                                  id : 
- *                                      type : string
- *                          user: 
- *                              type : object
- *                              properties:
- *                                  name : 
- *                                      type: string
- *                                  id : 
- *                                      type : string
- *                                  displayName :
- *                                      type : string
- *                          challenge :
- *                              type : string
- *                          pubKeyCredParams:
- *                              type : array
- *                              items:
- *                                  type: object
- *                                  properties :
- *                                      type :
- *                                         type : string
- *                                      alg:  
- *                                         type : number
- *                          timeout : 
- *                              type : number
- *                          excludeCredentials :
- *                              type : array
- *                              itmes:
- *                                  type : object
- *                                  properties :
- *                                      type :
- *                                          type : string
- *                                      alg : 
- *                                          type : number
- *                          authenticatorSelection :
- *                              type : object
- *                              properties :
- *                                  authenticatorAttachment :
- *                                      type : string
- *                                  requireResidentKey : 
- *                                      type : boolean
- *                                  userVerification : 
- *                                      type : string
- *                          attestation : 
- *                              type : string
- *                          sessionId : 
- *                              type : string                            
+ *                  description : Check Success Data 
  *                          
  */
 
