@@ -65,7 +65,7 @@ router.post('/concert/create/', function(req,res,next){
             
             console.log(selectCategory)
             
-            newConcert.category.push(selectCategory);
+            newConcert.category = selectCategory;
             console.log(newConcert);
             
             newConcert.save().then((result)=>{
@@ -80,7 +80,7 @@ router.post('/concert/create/', function(req,res,next){
                             seatNumber: j,
                             priority: 0
                         })
-                        newSeat.concert.push(concert);
+                        newSeat.concert =concert;
 
                         newSeat.save().then((result)=>{
                             console.log(result);
