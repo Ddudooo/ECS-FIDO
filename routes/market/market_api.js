@@ -22,9 +22,9 @@ var router = express.Router();
  *      get :
  *          summary : market api 테스트
  *          tags : [market]
- *      responses :
- *          200 : 
- *              desciption : 성공
+ *          responses :
+ *              200 : 
+ *                  desciption : 성공
  */
 router.get('', function (req, res, next) {
     res.json({

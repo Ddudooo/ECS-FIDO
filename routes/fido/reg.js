@@ -49,15 +49,16 @@ router.get('/', function (req, res, next) {
  *                                  example : platform
  *                              requireResidentKey:
  *                                  type : boolean
+ *                                  enum : [true, false]
  *                                  example : false
  *                              userVerification:
  *                                  type : string
  *                                  enum : [required, preferred, discouraged]
  *                                  example : preferred
- *                      attestation:
- *                          type : string
- *                          enum : [none, indirect, direct]
- *                          example : none
+ *                              attestation:
+ *                                  type : string
+ *                                  enum : [none, indirect, direct]
+ *                                  example : none
  *          responses :
  *              200 : 
  *                  description : 성공시 데이터 확인바람
