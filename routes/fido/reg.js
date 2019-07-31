@@ -25,30 +25,38 @@ router.get('/', function (req, res, next) {
  * /fido/reg/challenge/:
  *      post:
  *          summary : Fido Register challenge
- *          tags : [Fido]
+ *          tags : [Fido]          
  *          parameters:
- *              - in : body
- *                description : Fido Register Challenge
- *                content:
- *                  application/json:
- *                       schema :
- *                           type : object
- *                           properties : 
- *                               username :
- *                                   type : string
- *                               displayName :
- *                                   type : string
- *                               authenticatorSelection :
- *                                   type : object 
- *                                   properties :
- *                                       authenticatorAttachment:
- *                                           type : string
- *                                       requireResidentKey:
- *                                           type : boolean
- *                                       userVerification:
- *                                           type : string
- *                               attestation:
- *                                   type : string
+ *              -   in : body
+ *                  name : regData
+ *                  description : Fido Register Challenge
+ *                  schema :
+ *                      type : object
+ *                      properties : 
+ *                          username :
+ *                              type : string
+ *                          displayName :
+ *                             type : string
+ *                          authenticatorSelection :
+ *                              type : object 
+ *                              properties :
+ *                                  authenticatorAttachment:
+ *                                      type : string
+ *                                  requireResidentKey:
+ *                                      type : boolean
+ *                                  userVerification:
+ *                                      type : string
+ *                                  attestation:
+ *                                      type : string
+ *                      example:
+ *                          username : test
+ *                          displayName : test
+ *                          authenticatorSelection :
+ *                              authenticatorAttachment: platform
+ *                              requireResidentKey : false
+ *                              userVerification : preferred
+ *                              attestation : none
+ *                          
  *          responses :
  *              200 : 
  *                  description : Check Success Data 
@@ -108,24 +116,25 @@ router.post('/challenge', function (req, res, next) {
  *          summary : Fido Register Response
  *          tags : [Fido]
  *          parameters:
- *              - in : body
- *                type : object
- *                properties :
- *                  id : 
- *                      type : string
- *                      example : ANYT_i8ijCUb8Z2nTf4u-vCf0qPnDhaYnO-p-WRWZH-S9WLZtpIQ7FjXrXzwgyJftSM_t9LBr4zQAxnVDhpB3_y-994Hrz30PBrpYcFNR8nJaKn-BmseolfhtPnjVS-2d5pglg
- *                  type :
- *                      type : string 
- *                      example : public-key
- *                  response :
- *                      type : object
- *                      properties :
- *                          clientDataJSON :
- *                              type : string
- *                              example : eyJjaGFsbGVuZ2UiOiJ3cTRWVUxrME51cU1CTEk3c1BfUjdSMEJLanBDZmREYl8zOGVSc2ZaV2FxWjgtOElsc2lGbDcwT1dPb1FUcjg0Yzk1TU40NXhxbnhOLWVoNjhXWjFhUSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInR5cGUiOiJ3ZWJhdXRobi5jcmVhdGUifQ
- *                          attestationObject :
- *                              type : string
- *                              example : o2NmbXRmcGFja2VkZ2F0dFN0bXSiY2FsZyZjc2lnWEcwRQIgEcYweMLdeqXZeGdhiTJybxBXpe358cwiHBkMC4L1KAsCIQDV4TR7csCzdVw0GznW618JH8V9xcAsFiaru8-dsiS8mGhhdXRoRGF0YVjoSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFW9FmTQAAAAAAAAAAAAAAAAAAAAAAZADWE_4vIowlG_Gdp03-Lvrwn9Kj5w4WmJzvqflkVmR_kvVi2baSEOxY16188IMiX7UjP7fSwa-M0AMZ1Q4aQd_8vvfeB6899Dwa6WHBTUfJyWip_gZrHqJX4bT541UvtneaYJalAQIDJiABIVggLUl0qbsTH3N2kQhXiTiNxifzb2z34X8ZNPf71r2vAUkiWCB9xtKPKa9f-4ZkizYhDqtaSZ0lC55UpVYYHN37lkKWcA
+ *              -   in : body
+ *                  name : regResponse
+ *                  type : object
+ *                  properties :
+ *                      id : 
+ *                          type : string
+ *                          example : ANYT_i8ijCUb8Z2nTf4u-vCf0qPnDhaYnO-p-WRWZH-S9WLZtpIQ7FjXrXzwgyJftSM_t9LBr4zQAxnVDhpB3_y-994Hrz30PBrpYcFNR8nJaKn-BmseolfhtPnjVS-2d5pglg
+ *                      type :
+ *                          type : string 
+ *                          example : public-key
+ *                      response :
+ *                          type : object
+ *                          properties :
+ *                              clientDataJSON :
+ *                                  type : string
+ *                                  example : eyJjaGFsbGVuZ2UiOiJ3cTRWVUxrME51cU1CTEk3c1BfUjdSMEJLanBDZmREYl8zOGVSc2ZaV2FxWjgtOElsc2lGbDcwT1dPb1FUcjg0Yzk1TU40NXhxbnhOLWVoNjhXWjFhUSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInR5cGUiOiJ3ZWJhdXRobi5jcmVhdGUifQ
+ *                              attestationObject :
+ *                                  type : string
+ *                                  example : o2NmbXRmcGFja2VkZ2F0dFN0bXSiY2FsZyZjc2lnWEcwRQIgEcYweMLdeqXZeGdhiTJybxBXpe358cwiHBkMC4L1KAsCIQDV4TR7csCzdVw0GznW618JH8V9xcAsFiaru8-dsiS8mGhhdXRoRGF0YVjoSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFW9FmTQAAAAAAAAAAAAAAAAAAAAAAZADWE_4vIowlG_Gdp03-Lvrwn9Kj5w4WmJzvqflkVmR_kvVi2baSEOxY16188IMiX7UjP7fSwa-M0AMZ1Q4aQd_8vvfeB6899Dwa6WHBTUfJyWip_gZrHqJX4bT541UvtneaYJalAQIDJiABIVggLUl0qbsTH3N2kQhXiTiNxifzb2z34X8ZNPf71r2vAUkiWCB9xtKPKa9f-4ZkizYhDqtaSZ0lC55UpVYYHN37lkKWcA
  *      responses :
  *          200 : 
  *              description : 성공

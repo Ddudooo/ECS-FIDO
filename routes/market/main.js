@@ -160,6 +160,16 @@ router.post('/concert/seat/', (req,res, next)=>{
             seatinfo.status = "Select";
             seatinfo.save().then((result)=>{
                 console.log(result);
+                setTimeout(()=>{
+                    if(result.status=="Select"){
+                        result.status = "None";
+                        result.save().then((releaseSeat)=>{
+                            console.log("Release seat");
+                        }).catch((err)=>{
+                            console.error(err);
+                        });
+                    }
+                });
                 res.redirect('/market/');
             })
         }

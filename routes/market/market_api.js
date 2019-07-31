@@ -89,12 +89,13 @@ router.get('/category', function(req,res,next){
  *                                  status : 콘서트 활성 상태
  *                                  title : 콘서트 명
  *      post :
- *          summary : 콘서트 좌석 정보
+ *          summary : 콘서트 정보
  *          tags : [market]
  *          produces :
  *              - application/json
  *          parameters:
  *              - in : body
+ *                name : concertSearch
  *                description : 콘서트 검색 </br>
  *                              이름으로 검색시 동일 이름 여러 개 나올 수 있음 
  *                schema :
@@ -302,6 +303,7 @@ router.post('/concert/', (req, res, next) => {
  *              - application/json
  *          parameters:
  *              - in : body
+ *                name : concertSeats
  *                description : 콘서트 좌석 정보</br>
  *                              Login으로 생성된 JWT 토큰 필요 </br>
  *                              seatId 혹은 mainSeat, (middleSeat), seatNumber 필요</br>
@@ -451,6 +453,7 @@ router.post('/seat/', (req, res, next) => {
  *              - application/json
  *          parameters :
  *              - in : body
+ *                name : seatPayment
  *                description : 선택 좌석을 결정 상태(결제 상태)로 변경 </br>
  *                              결제 모듈 추가 여부에 따라 수정될 가능성이 있음
  *                schema :
