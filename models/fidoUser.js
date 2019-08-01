@@ -2,21 +2,24 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-var userSchema = new Schema({
+var fidoUserSchema = new Schema({
     rpid : {
         type: String,
         required : true,        
-    },
-    id : {
-        type: String,
-        required : true,        
-    },
+    },    
     name : {
         type: String,
         required : true,
     },
     displayName : {
         type: String
+    },
+    id : {
+        type: String,
+        required : true
+    },
+    sessionId : {
+        type : String
     },
     aaguid:{
         type : String
@@ -42,6 +45,9 @@ var userSchema = new Schema({
     authenticatedAt:{
         type: Date
     },
+    state : {
+        type: String
+    }
 });
 
-module.exports = mongoose.model('fidoUser', userSchema);
+module.exports = mongoose.model('fidoUser', fidoUserSchema);

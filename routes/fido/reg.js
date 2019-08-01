@@ -10,7 +10,7 @@ var base64url = require('base64url');
 var regenerate = require('regenerate');
 var request = require('request');
 var appRoot = require('app-root-path');
-var fidoUser = require(appRoot+'/models/user');
+var fidoUser = require(appRoot+'/models/fidoUser');
 
 var router = express.Router();
 
@@ -76,7 +76,7 @@ router.post('/challenge', function (req, res, next) {
         },
         "user": {
             "name": req.body.username,
-            "id": req.session.id,
+            "id": Buffer.from(req.body.username+req.body.displayName).toString('base64'),
             "displayName": req.body.displayName
         },
         "authenticatorSelection": {
@@ -99,11 +99,34 @@ router.post('/challenge', function (req, res, next) {
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body); // Print the HTML for the Google homepage
         if(response && response.statusCode == 200){
-	    delete body.serverResponse;
-	    body.status="ok";
-	    body.attestation=params.attestation;
-	    res.cookie('sessionId', body.sessionId);
+	        delete body.serverResponse;
+	        body.status="ok";
+	        body.attestation=params.attestation;
+	        res.cookie('sessionId', body.sessionId);
             res.send(body);
+            let userInfo = {
+                rpid : "www.ecs-fido.com",
+                id : body.user.id,
+                name : body.user.name,
+                displayName : body.user.displayName,
+                sessionId : body.sessionId
+            }
+            fidoUser(userInfo).save().then((result)=>{
+                console.log(result);
+                console.log("setTimeout..."+body.timeout);
+                setTimeout(()=>{
+                    fidoUser.remove(result, (err, output)=>{
+                        if(err){
+                            console.error(err);
+                        }else{
+                            console.log("TIMEOUT...");
+                            console.log(output);
+                        }
+                    })
+                }, body.timeout);
+            }).catch((err)=>{
+                console.error(err);
+            });
         }else{
             res.send(body);
         }
@@ -168,14 +191,26 @@ router.post('/attestation/result', (req,res, next)=>{
 	    console.log("________________________________________________________________________");
 	    console.log('body : ' , body);
 	    console.log("________________________________________________________________________");
-	    if( response && response.statusCode == 200){
+	    if( response && response.statusCode == 200 && body.serverResponse.internalError == 'SUCCESS'){            
             body.status = 'ok';
-            fidoUser(body).save().then((fido_user)=>{
-                console.log(fido_user)
-            }).catch((err)=>{
-                console.error(err);
-            });
             res.send(body);
+            fidoUser.findOne({
+                sessionId : sessionId
+            }).exec((err, data)=>{
+                if(err||!data){
+                    //not save but fido server save
+                    //retry saving...
+                }
+                data.aaguid = body.aaguid;
+                data.credentialId = body.credentialId;
+                data.state = "CONFIRM"
+                data.save().then((saveData)=>{
+                    console.log(saveData);                    
+                }).catch((err)=>{
+                    console.error(err);
+                })
+            })
+
 	    }else{
 		    res.send(body);
 	    }
