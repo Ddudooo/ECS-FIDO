@@ -9,8 +9,10 @@ var express = require('express');
 var base64url = require('base64url');
 var regenerate = require('regenerate');
 var request = require('request');
-var router = express.Router();
+var appRoot = require('app-root-path');
+var fidoUser = require(appRoot+'/models/user');
 
+var router = express.Router();
 
 // url /fido/reg/*
 
@@ -135,9 +137,9 @@ router.post('/challenge', function (req, res, next) {
  *                              attestationObject :
  *                                  type : string
  *                                  example : o2NmbXRmcGFja2VkZ2F0dFN0bXSiY2FsZyZjc2lnWEcwRQIgEcYweMLdeqXZeGdhiTJybxBXpe358cwiHBkMC4L1KAsCIQDV4TR7csCzdVw0GznW618JH8V9xcAsFiaru8-dsiS8mGhhdXRoRGF0YVjoSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFW9FmTQAAAAAAAAAAAAAAAAAAAAAAZADWE_4vIowlG_Gdp03-Lvrwn9Kj5w4WmJzvqflkVmR_kvVi2baSEOxY16188IMiX7UjP7fSwa-M0AMZ1Q4aQd_8vvfeB6899Dwa6WHBTUfJyWip_gZrHqJX4bT541UvtneaYJalAQIDJiABIVggLUl0qbsTH3N2kQhXiTiNxifzb2z34X8ZNPf71r2vAUkiWCB9xtKPKa9f-4ZkizYhDqtaSZ0lC55UpVYYHN37lkKWcA
- *      responses :
- *          200 : 
- *              description : 성공
+ *          responses :
+ *              200 : 
+ *                  description : 성공
  */
 router.post('/attestation/result', (req,res, next)=>{
     console.log("POST '/fido/reg/attestation/result' \n");
@@ -167,8 +169,13 @@ router.post('/attestation/result', (req,res, next)=>{
 	    console.log('body : ' , body);
 	    console.log("________________________________________________________________________");
 	    if( response && response.statusCode == 200){
-		    body.status = 'ok';
-		    res.send(body);
+            body.status = 'ok';
+            fidoUser(body).save().then((fido_user)=>{
+                console.log(fido_user)
+            }).catch((err)=>{
+                console.error(err);
+            });
+            res.send(body);
 	    }else{
 		    res.send(body);
 	    }
