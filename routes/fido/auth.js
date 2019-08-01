@@ -32,6 +32,10 @@ router.post('/challenge', function (req, res, next) {
                 //    type : "public-key",
                 //    id : crypto.createHash('sha256').update(req.body.username).digest('base64')
                 //});
+                body.allowCredentials.push({
+                    type: "public-key",
+                    id : Buffer.from(body.sessionId).toString('base64') 
+                });
         		body.status="ok";
     	       	res.cookie('sessionId', body.sessionId);
             	delete body.sessionId;
