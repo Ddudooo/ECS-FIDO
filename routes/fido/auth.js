@@ -22,7 +22,9 @@ router.post('/challenge', function (req, res, next) {
             res.status(500).json({status:"fail"});
             return;
         }        
-        req.body.id = user.credentialId;
+        // req.body.id = user.id;
+        // req.body.credentialId = user.credentialId;
+        // req.body.aaguid = user.aaguid;
         console.log("=============================================================");
         console.log(req.body);
         console.log("=============================================================");
@@ -46,10 +48,18 @@ router.post('/challenge', function (req, res, next) {
                     //    type : "public-key",
                     //    id : crypto.createHash('sha256').update(req.body.username).digest('base64')
                     //});
-                    body.allowCredentials.push({
-                        type: "public-key",
-                        id : Buffer.from(req.body.id).toString('base64') 
-                    });
+                    if(req.body.credentialId){
+                        body.allowCredentials.push({
+                            type: "public-key",
+                            id : Buffer.from(req.body.credentialId).toString('base64') 
+                        });
+                    }
+                    if(req.body.id){
+                        body.allowCredentials.push({
+                            type: "public-key",
+                            id : Buffer.from(req.body.id).toString('base64') 
+                        });
+                    }
                     body.status="ok";
                     res.cookie('sessionId', body.sessionId);
                     delete body.sessionId;

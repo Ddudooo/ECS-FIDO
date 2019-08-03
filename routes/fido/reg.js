@@ -119,14 +119,14 @@ router.post('/challenge', function (req, res, next) {
                             .exec((err,timeOutUser)=>{
                     if(timeOutUser.state!="CONFIRM"){
                             console.log(timeOutUser);
-                            fidoUser.remove(result, (err, output)=>{
-                            if(err){
-                                console.error(err);
-                            }else{
-                                console.log("TIMEOUT...");
-                                console.log(output);
-                            }
-                        })
+                            fidoUser.deleteOne(result)
+                                    .then((output)=>{
+                                        console.log("TIMEOUT...");
+                                        console.log(output);
+                                    })
+                                    .catch((err)=>{
+                                        console.error(err);
+                                    })
                     }else{
                         console.log("CONFIRM USER");
                         console.log(timeOutUser);
