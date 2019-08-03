@@ -115,14 +115,24 @@ router.post('/challenge', function (req, res, next) {
                 console.log(result);
                 console.log("setTimeout..."+body.timeout);
                 setTimeout(()=>{
-                    fidoUser.remove(result, (err, output)=>{
-                        if(err){
-                            console.error(err);
-                        }else{
-                            console.log("TIMEOUT...");
-                            console.log(output);
-                        }
-                    })
+                    fidoUser.findOne(result)
+                            .exec((err,timeOutUser)=>{
+                    if(timeOutUser.state!="CONFIRM"){
+                            console.log(timeOutUser);
+                            fidoUser.remove(result, (err, output)=>{
+                            if(err){
+                                console.error(err);
+                            }else{
+                                console.log("TIMEOUT...");
+                                console.log(output);
+                            }
+                        })
+                    }else{
+                        console.log("CONFIRM USER");
+                        console.log(timeOutUser);
+                    }
+                            });
+                    
                 }, body.timeout);
             }).catch((err)=>{
                 console.error(err);
