@@ -382,7 +382,7 @@ function getAssertion(options) {
             logVariable("response.signature (b64url)", assertion.response.signature);
             logVariable("id", assertion.type);
 
-            return rest_post("/assertion/result", assertion);
+            return rest_post("/fido/auth/assertion/result", assertion);
         })
         .catch(function(error) {
             logVariable("get assertion error", error);

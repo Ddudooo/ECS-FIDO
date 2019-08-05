@@ -169,7 +169,7 @@ router.post('/concert/seat/', (req,res, next)=>{
                             console.error(err);
                         });
                     }
-                });
+                }, 1000*60);
                 res.redirect('/market/');
             })
         }

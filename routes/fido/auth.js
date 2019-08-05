@@ -22,7 +22,7 @@ router.post('/challenge', function (req, res, next) {
             res.status(500).json({status:"fail"});
             return;
         }        
-        // req.body.id = user.id;
+        req.body.userId = user.id;
         // req.body.credentialId = user.credentialId;
         // req.body.aaguid = user.aaguid;
         console.log("=============================================================");
@@ -44,27 +44,22 @@ router.post('/challenge', function (req, res, next) {
                 if(body.serverResponse.internalError === 'SUCCESS'){
                     //let counter =0;
                     delete body.serverResponse;
-                    //body.allowCredentials.push({
-                    //    type : "public-key",
-                    //    id : crypto.createHash('sha256').update(req.body.username).digest('base64')
-                    //});
-                    if(req.body.credentialId){
-                        body.allowCredentials.push({
-                            type: "public-key",
-                            id : Buffer.from(req.body.credentialId).toString('base64') 
-                        });
-                    }
-                    if(req.body.id){
-                        body.allowCredentials.push({
-                            type: "public-key",
-                            id : Buffer.from(req.body.id).toString('base64') 
-                        });
-                    }
+                   
                     body.status="ok";
                     res.cookie('sessionId', body.sessionId);
-                    delete body.sessionId;
-                    console.log(body);
-                    res.send(body);
+                    user.sessionId = body.sessionId
+                    user.save()
+                        .then((fidouser)=>{
+                            console.log("SESSIONID Update");
+                            delete body.sessionId;
+                            console.log(body);
+                            res.send(body);
+                        })
+                        .catch((err)=>{
+                            console.error(err);
+                            res.status(500).json({status:"fail"});
+                        });
+                    
                 }
                 else{
                     res.send(body);
@@ -75,6 +70,51 @@ router.post('/challenge', function (req, res, next) {
             }
         });        
     });    
+});
+
+router.post('/assertion/result', (req,res, next)=>{
+    console.log("POST '/fido/auth/assertion/result'");
+    sessionId = req.cookies.sessionId;
+    fidoUser.findOne({
+        sessionId : sessionId
+    }).exec((err,user)=>{
+        if(err||!user){
+            res.status(500).json({status:"fail",msg:"sessionId not found"});
+            return;
+        }
+        req.body.response.userHandle = user.id;
+        console.log("USER ID = "+user.id);
+        console.log("RESPONSE ID = " +req.body.response.userHandle);
+        param = {
+            origin: req.headers['origin'],
+            serverPublicKeyCredential: req.body,
+            sessionId: sessionId,
+            rpId: "www.ecs-fido.com"
+        };
+        const options ={
+            uri: 'https://prod-fido-fido2-server.line-apps.com/server/fido2/auth/response',
+            method:'POST',
+            body: param,
+            json: true
+        };
+        console.log(param);
+        request.post(options, (error, response, body)=>{
+            console.log("========================================================================");
+            console.log('error:', error);//print error
+            console.log("========================================================================");
+            console.log('statusCode : ', response && response.statusCode);
+            console.log("________________________________________________________________________");
+            console.log('body : ' , body);
+            console.log("________________________________________________________________________");
+            if( response && response.statusCode == 200 && body.serverResponse.internalError == 'SUCCESS'){            
+                body.status = 'ok';
+                res.send(body);            
+    
+            }else{
+                res.status(500).send(body);
+            }
+        });
+    })
 });
 
 module.exports = router;
