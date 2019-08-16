@@ -3,7 +3,37 @@ var appRoot = require('app-root-path');
 // DB MODELS
 var market = require(appRoot + '/models/concert');
 var category = market.Category
+
+// file control
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, appRoot+'/public/images/upload') // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
+    },
+    filename: function (req, file, cb) {
+      cb(null, req.body.title?req.body.title+file.mimetype:file.originalname) // cb 콜백함수를 통해 전송된 파일 이름 설정
+    }
+  })
+  var upload = multer({ storage: storage });
+
 var router = express.Router();
+
+//date control
+Date.prototype.yyyymmdd = function(glue) {
+    if(glue == null) {
+      glue = "/";
+    }
+    var yyyy = this.getFullYear();
+    var mm = this.getMonth() < 9 ? "0" + (this.getMonth() + 1) : (this.getMonth() + 1); // getMonth() is zero-based
+    var dd  = this.getDate() < 10 ? "0" + this.getDate() : this.getDate();
+    return "".concat(yyyy).concat(glue).concat(mm).concat(glue).concat(dd);
+  };
+
+Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
 
 
 
@@ -48,12 +78,14 @@ router.get('/concert/create/', function(req,res, next){
     
 })
 
-router.post('/concert/create/', function(req,res,next){
+router.post('/concert/create/', upload.single('image'), function(req,res,next){
     console.log(req.body);
     var selectCategory
 
     var newConcert = new market.Concert({        
         title: req.body.title,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
         priority: req.body.priority
     })
 
@@ -62,8 +94,13 @@ router.post('/concert/create/', function(req,res,next){
     }).then((result)=>{
         if(result.length==1){
             selectCategory = result[0];
-            
-            console.log(selectCategory)
+            if(req.file){
+                console.log("Upload file!"+req.file.originalname);
+                console.log("Upload file mimetype : " +req.file.mimetype);
+                console.log("Upload file path : "+req.file.path);
+                newConcert.thumbnail = "/images/upload/"+req.file.originalname;
+            }
+            console.log(selectCategory);
             
             newConcert.category = selectCategory;
             console.log(newConcert);
@@ -72,27 +109,34 @@ router.post('/concert/create/', function(req,res,next){
                 console.log(result);
                 return result;  
             }).then((concert)=>{
-                let defaultArray = ['A', 'B', 'C'];
-                for (var i of defaultArray){
-                    for (var j =1; j<=3; j++){
-                        var newSeat = new market.Seat({
-                            mainSeat: i,                            
-                            seatNumber: j,
-                            priority: 0
-                        })
-                        newSeat.concert =concert;
+                var concert_startDate = new Date(concert.startDate);
+                const concert_endDate = new Date(concert.endDate);
 
-                        newSeat.save().then((result)=>{
-                            console.log(result);
-                            
-                        }).catch((err)=>{
-                            console.error(err);
-                            res.redirect('/market/');
-                        })
+                while(concert_startDate <= concert_endDate){
+                    let defaultArray = ['A', 'B', 'C'];
+                    for (var i of defaultArray){
+                        for (var j =1; j<=3; j++){
+                            var newSeat = new market.Seat({
+                                mainSeat: i,                            
+                                seatNumber: j,
+                                date: concert_startDate.yyyymmdd(),
+                                priority: 0
+                            })
+                            newSeat.concert =concert;
+
+                            newSeat.save().then((result)=>{
+                                console.log(result);
+                                
+                            }).catch((err)=>{
+                                console.error(err);
+                                res.redirect('/market/');
+                            })
+                        }
                     }
+                    concert_startDate = concert_startDate.addDays(1);
                 }
-                
             }).catch((err)=>{
+                console.log("FAIL TO CREATE CONCERT!!!!!");
                 console.error(err);
                 res.redirect('/market/');
             })

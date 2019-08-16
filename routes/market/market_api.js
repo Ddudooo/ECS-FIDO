@@ -11,9 +11,30 @@ var market = require(appRoot + '/models/concert');
 var User = require(appRoot + '/models/user');
 var jwt = require('jsonwebtoken');
 var secretObj = require(appRoot + '/config/jwt');
+
+//image file 
+var fs = require('fs');
+const sharp = require('sharp'); //resize image
+
 var router = express.Router();
 
-
+function base64_encode(file) {
+    // read binary data
+    return new Promise((resolve, reject) =>{
+        sharp(appRoot+"/public"+file)
+        .rotate()
+        .resize(200)
+        .toBuffer()
+        .then( data=>{
+            resolve(new Buffer(data).toString('base64'));
+        })
+        .catch(err=>{
+            console.error(err);
+            var bitmap = fs.readFileSync(appRoot+"/public"+file);
+            resolve( new Buffer(bitmap).toString('base64'));
+        })
+    } )
+}
 
 // url /market/api/
 /**
@@ -101,11 +122,14 @@ router.get('/category', function(req,res,next){
  *                schema :
  *                  type : object
  *                  properties:
+ *                      date :
+ *                          type:string
  *                      title:
  *                          type:string
  *                      concertId :
  *                          type:string
  *                  example :
+ *                      date : 날짜(yyyy/mm/dd) 필수
  *                      title : 콘서트 명 (없을시 ID값 필요)
  *                      concertId : 콘서트 ID (없을시 콘서트 명 필요)
  *          responses :
@@ -154,15 +178,19 @@ router.get('/concert/', (req, res, next) => {
                                     _id: value.category
                                 }).exec((err, data) => {
                                     concertList[count].category[0] = String(data.name);
-                                    count++;
-                                    if (count == list.length) {
-                                        console.log('Done!');
+                                    base64_encode(concertList[count].thumbnail)
+                                        .then(image=>{
+                                            concertList[count].thumbnail = image;
+                                            count++;
+                                            if (count == list.length) {
+                                                console.log('Done!');
 
-                                        res.json({
-                                            status: "success",
-                                            concertList: concertList
+                                                res.json({
+                                                    status: "success",
+                                                    concertList: concertList
+                                                });
+                                            }
                                         });
-                                    }
                                 });
                             }
                         );
@@ -187,15 +215,19 @@ router.get('/concert/', (req, res, next) => {
                             _id: value.category
                         }).exec((err, data) => {
                             concertList[count].category[0] = String(data.name);
-                            count++;
-                            if (count == list.length) {
-                                console.log('Done!');
+                            base64_encode(concertList[count].thumbnail)
+                                        .then(image=>{
+                                            concertList[count].thumbnail = image;
+                                            count++;
+                                            if (count == list.length) {
+                                                console.log('Done!');
 
-                                res.json({
-                                    status: "success",
-                                    concertList: concertList
-                                });
-                            }
+                                                res.json({
+                                                    status: "success",
+                                                    concertList: concertList
+                                                });
+                                            }
+                                        });
                         });
                     }
                 );
@@ -215,7 +247,8 @@ router.post('/concert/', (req, res, next) => {
     console.log(req.body);
     if (req.body.title) {
         let query = {
-            title: req.body.title
+            title: req.body.title,
+            date: req.body.date
         };
         if (req.body.concertId) {
             query._id = req.body.concertId;
@@ -263,7 +296,8 @@ router.post('/concert/', (req, res, next) => {
         });
     } else {
         let query = {
-            _id: req.body.concertId
+            _id: req.body.concertId,
+            date: req.body.date
         };
         market.Concert.findOne(query).exec((err, concert) => {
             if (concert) {

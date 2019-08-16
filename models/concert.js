@@ -37,6 +37,18 @@ var concertSchema = new Schema({    //콘서트 스키마
             ref: 'Category',
             require: true,
     },
+    thumbnail:{
+        type: String,
+        default: "/images/upload/notfound.png"
+    },
+    startDate:{
+        type: String,
+        default: Date.now
+    },
+    endDate:{
+        type: String,
+        default: Date.now
+    },
     priority : {                    // 우선순위
         type: Number,
         required : false,
@@ -72,6 +84,10 @@ var seatSchema = new Schema({       // 자리 스키마
     mainSeat:{                      // 주 분류 A열 B열 ...
         type: String,
         require : true
+    },
+    date:{
+        type: String,
+        default: Date.now
     },
     middleSeat:{                    // 중 분류 추가 분류가 필요할 경우 사용
         type: String,
