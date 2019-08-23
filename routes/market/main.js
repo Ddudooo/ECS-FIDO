@@ -86,7 +86,8 @@ router.post('/concert/create/', upload.single('image'), function(req,res,next){
         title: req.body.title,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
-        priority: req.body.priority
+        priority: req.body.priority,
+        description : req.body.description?req.body.description:''
     })
 
     market.Category.find({

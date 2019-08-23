@@ -49,6 +49,10 @@ var concertSchema = new Schema({    //콘서트 스키마
         type: String,
         default: Date.now
     },
+    description:{                   // 설명글
+        type: String,
+        require: false,
+    },
     priority : {                    // 우선순위
         type: Number,
         required : false,

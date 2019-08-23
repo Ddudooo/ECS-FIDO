@@ -129,7 +129,7 @@ router.get('/category', function(req,res,next){
  *                      concertId :
  *                          type:string
  *                  example :
- *                      date : 날짜(yyyy/mm/dd) 필수
+ *                      date : 날짜(yyyy/mm/dd) 선택 / 값이 있을시 해당 날짜만 조회
  *                      title : 콘서트 명 (없을시 ID값 필요)
  *                      concertId : 콘서트 ID (없을시 콘서트 명 필요)
  *          responses :
@@ -247,12 +247,12 @@ router.post('/concert/', (req, res, next) => {
     console.log(req.body);
     if (req.body.title) {
         let query = {
-            title: req.body.title,
-            date: req.body.date
+            title: req.body.title            
         };
         if (req.body.concertId) {
             query._id = req.body.concertId;
         }
+        
         market.Concert.find(query).then((concert) => {
             console.log(concert);
             if (concert.length > 1) {
@@ -263,9 +263,13 @@ router.post('/concert/', (req, res, next) => {
                 });
                 return;
             } else if (concert.length == 1) {
-                market.Seat.find({
+                seatQuery={
                     status: "None"
-                }).then((Seat) => {
+                };
+                if (req.body.date){
+                    seatQuery.date = req.body.date;
+                }
+                market.Seat.find(seatQuery).then((Seat) => {
                     res.json({
                         status: "success",
                         concertSeat: Seat
@@ -296,14 +300,18 @@ router.post('/concert/', (req, res, next) => {
         });
     } else {
         let query = {
-            _id: req.body.concertId,
-            date: req.body.date
+            _id: req.body.concertId            
         };
+       
         market.Concert.findOne(query).exec((err, concert) => {
             if (concert) {
-                market.Seat.find({
+                seatQuery={
                     concert: concert
-                }).then((Seat) => {
+                };
+                if (req.body.date){
+                    seatQuery.date = req.body.date;
+                }
+                market.Seat.find(seatQuery).then((Seat) => {
                     //concert seat
                     res.json({
                         status: "success",

@@ -114,6 +114,12 @@ block content
                 .col-6
                     .form-check
                         input.form-control(placeholder="우선순위" type="number" id="concertPriority" name="priority" required)
+            .row
+                .col
+                    label description
+                .col-6
+                    .form-check
+                        input.form-control(placeholder="설명" type="text" id="concertDescription" name="description")
         hr
 
         button.btn.btn-primary(type="button" id="formSubmitButton" onclick="formSubmitClicked('concertForm');")
